@@ -1,0 +1,1 @@
+Esimerkkiprojekti vuoden 2025 Mobiilipelikehitys-kurssille.
