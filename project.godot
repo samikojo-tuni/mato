@@ -15,6 +15,13 @@ run/main_scene="res://Levels/test_level.tscn"
 config/features=PackedStringArray("4.3", "Mobile")
 config/icon="res://icon.svg"
 
+[display]
+
+window/size/viewport_width=256
+window/size/viewport_height=456
+window/stretch/mode="viewport"
+window/handheld/orientation=1
+
 [dotnet]
 
 project/assembly_name="Mato"
