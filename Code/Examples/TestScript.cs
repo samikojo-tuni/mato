@@ -1,30 +1,35 @@
 using Godot;
-using System;
 
 namespace SnakeGame
 {
-	public partial class TestScript : Node
+	public partial class TestScript : Node2D
 	{
-		private int _luku = 1;
-		private Calculator _calculator = null;
-
-		[Export] private int _luku2 = 0;
-
+		[Export] private float _speed = 1;
 		// Called when the node enters the scene tree for the first time.
 		public override void _Ready()
 		{
-			GD.Print($"Calculator: {_calculator}");
+			GD.Print($"Paikallinen sijainti: {Position}");
+			GD.Print($"Globaali sijainti: {GlobalPosition}");
 
-			_calculator = GetNode<Calculator>("Calculator");
-
-			GD.Print($"Calculator: {_calculator}");
+			GlobalPosition = new Vector2(50, 50);
 		}
 
 		// Called every frame. 'delta' is the elapsed time since the previous frame.
 		public override void _Process(double delta)
 		{
-			_luku = _calculator.Sum(_luku, _luku2);
-			GD.Print($"Luku: {_luku}");
+
+			Vector2 movement = Vector2.Down;
+
+			// Lisätään Globaaliin sijaintiin 1 y-koordinaatin suunnassa joka framella.
+			// Kappale liikkuu yhden pikselin alaspäin / frame.
+			// GlobalPosition += movement;
+			// GlobalPosition = GlobalPosition + movement;
+
+			// Liikutetaan yksi pikseli sekunnisssa.
+			// GlobalPosition += movement * (float)delta;
+
+			// Liikutetaan nopeuden verran sekunnissa.
+			GlobalPosition += movement * (float)delta * _speed;
 		}
 	}
 }
