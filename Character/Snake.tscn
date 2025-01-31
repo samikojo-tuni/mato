@@ -1,0 +1,13 @@
+[gd_scene load_steps=3 format=3 uid="uid://t0o6u5g7kd8y"]
+
+[ext_resource type="Script" path="res://Code/Snake.cs" id="1_xhpub"]
+[ext_resource type="Texture2D" uid="uid://dgoywi6r0iibo" path="res://Art/Snake.png" id="2_7ukdk"]
+
+[node name="Snake" type="Node2D"]
+script = ExtResource("1_xhpub")
+_speed = 20.0
+
+[node name="SnakeHead" type="Sprite2D" parent="."]
+texture = ExtResource("2_7ukdk")
+hframes = 3
+vframes = 3
