@@ -27,6 +27,3 @@ vframes = 3
 script = ExtResource("6_yx4rb")
 _speed = 10.0
 _direction = Vector2(5, 5)
-_moveBetweenPoint = true
-_pointA = Vector2(100, 100)
-_pointB = Vector2(300, 300)
