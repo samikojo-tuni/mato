@@ -1,3 +1,8 @@
-[gd_scene format=3 uid="uid://ggx23752wt8i"]
+[gd_scene load_steps=3 format=3 uid="uid://ggx23752wt8i"]
+
+[ext_resource type="Texture2D" uid="uid://bs7nxni2q6f0f" path="res://Art/Collectables/apple.png" id="1_8cn26"]
+[ext_resource type="Script" path="res://Code/Apple.cs" id="2_6klth"]
 
 [node name="Apple" type="Sprite2D"]
+texture = ExtResource("1_8cn26")
+script = ExtResource("2_6klth")

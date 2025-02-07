@@ -3,8 +3,10 @@ using System;
 
 namespace SnakeGame
 {
+
 	public partial class Cell : Sprite2D
 	{
+		public static EmptyCell Empty = new EmptyCell();
 
 		private Vector2I _gridPosition;
 
@@ -33,6 +35,49 @@ namespace SnakeGame
 
 				_gridPosition = newValue;
 			}
+		}
+
+		// Koska property on public, sen arvo voidaan lukea mistä vain.
+		// Koska set:n edessä on private-määre, sen arvo voidaan asettaa vain
+		// Cell-luokasta.
+		// Auto property. Kääntäjä konvertoi sen tavalliseksi propertyksi.
+		/// <summary>
+		/// Palauttaa viittauksen siihen olioon, joka on solun kohdalla.
+		/// </summary>
+		public ICellOccupier Occupier
+		{
+			get;
+			private set;
+		}
+
+		/// <summary>
+		/// Palauttaa tiedon siitä, onko solu vapaa vai onko jokin olio siinä.
+		/// </summary>
+		public bool IsFree
+		{
+			get { return Occupier == null || Occupier.Type == CellOccupierType.None; }
+		}
+
+		public override void _Ready()
+		{
+			Occupier = Empty;
+		}
+
+		public bool Occupy(ICellOccupier occupier)
+		{
+			if (!IsFree)
+			{
+				return false;
+			}
+
+			Occupier = occupier;
+			return true;
+		}
+
+
+		public void Release()
+		{
+			Occupier = Empty;
 		}
 	}
 }

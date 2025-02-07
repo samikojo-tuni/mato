@@ -14,10 +14,14 @@ namespace SnakeGame
 		}
 
 		[Export] private string _snakeScenePath = "res://Character/Snake.tscn";
+		[Export] private string _appleScenePath = "res://Levels/Collectables/Apple.tscn";
 		private PackedScene _snakeScene = null;
+		private PackedScene _appleScene = null;
 		private int _score = 0;
 		private Grid _grid = null;
 		private Snake _snake = null;
+		// Omenoita voi olla olemassa yksi kerrallaan.
+		private Apple _apple = null;
 
 		public int Score
 		{
@@ -54,19 +58,27 @@ namespace SnakeGame
 			ResetGame();
 		}
 
+		/// <summary>
+		/// Aloittaa uuden pelin.
+		/// </summary>
 		public void ResetGame()
 		{
+			// Tuhoa edellinen mato, jos se on olemassa.
 			if (_snake != null)
 			{
 				_snake.QueueFree();
 				_snake = null;
 			}
 
+			// Luo mato
 			_snake = CreateSnake();
-
 			AddChild(_snake);
 
+			// Nollaa pisteet
 			Score = 0;
+
+			// Luo omena
+			ReplaceApple();
 		}
 
 		private Snake CreateSnake()
@@ -82,6 +94,36 @@ namespace SnakeGame
 			}
 
 			return _snakeScene.Instantiate<Snake>();
+		}
+
+		public void ReplaceApple()
+		{
+			if (_apple != null)
+			{
+				Grid.ReleaseCell(_apple.GridPosition);
+
+				_apple.QueueFree();
+				_apple = null;
+			}
+
+			if (_appleScene == null)
+			{
+				_appleScene = ResourceLoader.Load<PackedScene>(_appleScenePath);
+				if (_appleScene == null)
+				{
+					GD.PrintErr("Can't load apple scene!");
+					return;
+				}
+			}
+
+			_apple = _appleScene.Instantiate<Apple>();
+			AddChild(_apple);
+
+			Cell freeCell = Grid.GetRandomFreeCell();
+			if (Grid.OccupyCell(_apple, freeCell.GridPosition))
+			{
+				_apple.SetPosition(freeCell.GridPosition);
+			}
 		}
 	}
 }
