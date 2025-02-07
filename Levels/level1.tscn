@@ -1,8 +1,11 @@
-[gd_scene load_steps=2 format=4 uid="uid://cra40mujgqvmt"]
+[gd_scene load_steps=4 format=4 uid="uid://cra40mujgqvmt"]
 
 [ext_resource type="TileSet" uid="uid://jr8hmhq2xmtw" path="res://Art/MapTimes.tres" id="1_tg07n"]
+[ext_resource type="Script" path="res://Code/Level.cs" id="1_wh52b"]
+[ext_resource type="PackedScene" uid="uid://cfjsuvcfb1s5w" path="res://Levels/Grid/Grid.tscn" id="2_lwsbv"]
 
 [node name="Level" type="Node2D"]
+script = ExtResource("1_wh52b")
 
 [node name="Camera2D" type="Camera2D" parent="."]
 
@@ -17,3 +20,6 @@ tile_set = ExtResource("1_tg07n")
 [node name="Borders" type="TileMapLayer" parent="Background"]
 tile_map_data = PackedByteArray("AAAHAAYAAgAAAAEAAAD4/wYAAgACAAAAAAAHAPn/AgADAAAAAAD4//n/AgABAAAAAAD5/wYAAgAAAAIAAAD6/wYAAgAAAAIAAAD7/wYAAgAAAAIAAAD8/wYAAgAAAAIAAAD9/wYAAgAAAAIAAAD+/wYAAgAAAAIAAAD//wYAAgAAAAIAAAAAAAYAAgAAAAIAAAABAAYAAgAAAAIAAAACAAYAAgAAAAIAAAADAAYAAgAAAAIAAAAEAAYAAgAAAAIAAAAFAAYAAgAAAAIAAAAGAAYAAgAAAAIAAAAHAPr/AgADAAEAAAAHAPv/AgADAAEAAAAHAPz/AgADAAEAAAAHAP3/AgADAAEAAAAHAP7/AgADAAEAAAAHAP//AgADAAEAAAAHAAAAAgADAAEAAAAHAAEAAgADAAEAAAAHAAIAAgADAAEAAAAHAAMAAgADAAEAAAAHAAQAAgADAAEAAAAHAAUAAgADAAEAAAD4//r/AgACAAEAAAD4//v/AgACAAEAAAD4//z/AgACAAEAAAD4//3/AgACAAEAAAD4//7/AgACAAEAAAD4/wAAAgACAAEAAAD4/wEAAgACAAEAAAD4/wIAAgACAAEAAAD4/wMAAgACAAEAAAD4/wQAAgACAAEAAAD4/wUAAgACAAEAAAD5//n/AgABAAEAAAD6//n/AgABAAEAAAD7//n/AgABAAEAAAD8//n/AgABAAEAAAD9//n/AgABAAEAAAD+//n/AgABAAEAAAD///n/AgABAAEAAAAAAPn/AgABAAEAAAABAPn/AgABAAEAAAACAPn/AgABAAEAAAADAPn/AgABAAEAAAAEAPn/AgABAAEAAAAFAPn/AgABAAEAAAAGAPn/AgABAAEAAAD4////AgACAAEAAAA=")
 tile_set = ExtResource("1_tg07n")
+
+[node name="Grid" parent="." instance=ExtResource("2_lwsbv")]
+top_level = true
