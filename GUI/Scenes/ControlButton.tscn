@@ -1,0 +1,13 @@
+[gd_scene load_steps=3 format=3 uid="uid://da265tqxmg5vl"]
+
+[ext_resource type="Texture2D" uid="uid://chwvlxwryrhlj" path="res://Art/UI/button-normal.png" id="1_6byak"]
+[ext_resource type="Texture2D" uid="uid://w2bx5300a0ua" path="res://Art/UI/button-pressed.png" id="2_gxove"]
+
+[node name="TextureButton" type="TextureButton"]
+offset_right = 16.0
+offset_bottom = 16.0
+scale = Vector2(2, 2)
+texture_normal = ExtResource("1_6byak")
+texture_pressed = ExtResource("2_gxove")
+texture_hover = ExtResource("1_6byak")
+texture_focused = ExtResource("1_6byak")

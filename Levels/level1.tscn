@@ -1,11 +1,14 @@
-[gd_scene load_steps=4 format=4 uid="uid://cra40mujgqvmt"]
+[gd_scene load_steps=6 format=4 uid="uid://cra40mujgqvmt"]
 
 [ext_resource type="TileSet" uid="uid://jr8hmhq2xmtw" path="res://Art/MapTimes.tres" id="1_tg07n"]
 [ext_resource type="Script" path="res://Code/Level.cs" id="1_wh52b"]
+[ext_resource type="PackedScene" uid="uid://dsq42udh57yuu" path="res://GUI/Scenes/TopUI.tscn" id="2_7nqqy"]
+[ext_resource type="PackedScene" uid="uid://cyxrb7jg6ft2j" path="res://GUI/Scenes/BottomUI.tscn" id="2_hukud"]
 [ext_resource type="PackedScene" uid="uid://cfjsuvcfb1s5w" path="res://Levels/Grid/Grid.tscn" id="2_lwsbv"]
 
-[node name="Level" type="Node2D"]
+[node name="Level" type="Node2D" node_paths=PackedStringArray("_topUIControl")]
 script = ExtResource("1_wh52b")
+_topUIControl = NodePath("UI/TopUi")
 
 [node name="Camera2D" type="Camera2D" parent="."]
 
@@ -14,6 +17,7 @@ tile_map_data = PackedByteArray("AAD//wEAAQAAAAIAAAD//wAAAQAAAAIAAAD+/wAAAQAAAAI
 tile_set = ExtResource("1_tg07n")
 
 [node name="Props" type="TileMapLayer" parent="Background"]
+position = Vector2(8, 8)
 tile_map_data = PackedByteArray("AAD7//v/AQAAAAAAAAD7/wEAAQAAAAAAAAACAP7/AQAAAAAAAAAFAPv/AQAAAAAAAAAGAAMAAQAAAAAAAAABAAUAAQAAAAAAAAD6/wUAAQAAAAAAAAD4//n/AQAAAAAAAAAEAAQAAQAAAAAAAAAHAAYAAQAAAAAAAAADAP7/AQAAAAAAAAACAPr/AQAAAAAAAAD//wQAAQAAAAAAAAD8/wQAAQABAAEAAAADAPz/AQABAAEAAAD6//3/AQABAAEAAAAFAAMAAQABAAEAAAAGAP3/AQABAAEAAAA=")
 tile_set = ExtResource("1_tg07n")
 
@@ -23,3 +27,21 @@ tile_set = ExtResource("1_tg07n")
 
 [node name="Grid" parent="." instance=ExtResource("2_lwsbv")]
 top_level = true
+
+[node name="UI" type="Control" parent="."]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -128.0
+offset_top = -228.0
+offset_right = 128.0
+offset_bottom = 228.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="TopUi" parent="UI" instance=ExtResource("2_7nqqy")]
+layout_mode = 1
+
+[node name="BottomUi" parent="UI" instance=ExtResource("2_hukud")]
+layout_mode = 1

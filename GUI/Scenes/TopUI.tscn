@@ -1,0 +1,46 @@
+[gd_scene load_steps=3 format=3 uid="uid://dsq42udh57yuu"]
+
+[ext_resource type="Theme" uid="uid://be1rladxy7241" path="res://GUI/UI-Theme.tres" id="1_lm5y3"]
+[ext_resource type="Script" path="res://Code/UI/TopUIControl.cs" id="1_xxmp4"]
+
+[node name="TopUi" type="Control" node_paths=PackedStringArray("_scoreLabel")]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_bottom = -356.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_xxmp4")
+_scoreLabel = NodePath("VBoxContainer/HBoxContainer/ScoreLabel")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme = ExtResource("1_lm5y3")
+alignment = 1
+
+[node name="Headline" type="Label" parent="VBoxContainer"]
+layout_mode = 2
+theme = ExtResource("1_lm5y3")
+theme_override_font_sizes/font_size = 32
+text = "Mato"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer"]
+layout_mode = 2
+alignment = 1
+
+[node name="ScoreLabel" type="Label" parent="VBoxContainer/HBoxContainer"]
+layout_mode = 2
+text = "Pisteet: 1000000"
+
+[node name="Button" type="Button" parent="VBoxContainer/HBoxContainer"]
+layout_mode = 2
+theme = ExtResource("1_lm5y3")
+text = "Restart"
