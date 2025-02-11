@@ -42,6 +42,20 @@ const int MAX_HEALTH = 100;
 private int _playerHealth;
 ```
 
+5. **Prefix** interface names with I and generic type parameters with T.
+
+```csharp
+public interface IHealth
+{
+    // code
+}
+
+public TComponent GetOrAddComponent<TComponent>(this GameObject gameObject)
+{
+    // code
+}
+```
+
 ## Layout and Formatting
 
 1. **Indentation**: Use tabs for indentation. Do NOT use spaces.
