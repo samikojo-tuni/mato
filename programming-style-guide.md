@@ -30,7 +30,7 @@ public void UpdateScore(int newScore)
 }
 ```
 
-3. **ALL_CAPS** for .8constants](https://learn.microsoft.com/en-us/dotnet/csharp/programming-guide/classes-and-structs/constants).
+3. **ALL_CAPS** for [constants](https://learn.microsoft.com/en-us/dotnet/csharp/programming-guide/classes-and-structs/constants).
 
 ```csharp
 const int MAX_HEALTH = 100;
