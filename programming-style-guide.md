@@ -8,7 +8,7 @@
 
 ## Naming Conventions
 
-1. **PascalCase** for class names, methods, and properties.
+1. **PascalCase** for [class](https://learn.microsoft.com/en-us/dotnet/csharp/fundamentals/types/classes) names, [methods](https://learn.microsoft.com/en-us/dotnet/csharp/programming-guide/classes-and-structs/methods), and [properties](https://learn.microsoft.com/en-us/dotnet/csharp/programming-guide/classes-and-structs/properties).
 
 ```csharp
 public class PlayerCharacter
@@ -21,7 +21,7 @@ public class PlayerCharacter
 }
 ```
 
-2. **camelCase** for local variables and method parameters.
+2. **camelCase** for [local variables](https://learn.microsoft.com/en-us/dotnet/csharp/language-reference/language-specification/variables#929-local-variables) and [method parameters](https://learn.microsoft.com/en-us/dotnet/csharp/language-reference/keywords/method-parameters).
 
 ```csharp
 public void UpdateScore(int newScore)
@@ -30,13 +30,13 @@ public void UpdateScore(int newScore)
 }
 ```
 
-3. **ALL_CAPS** for constants.
+3. **ALL_CAPS** for .8constants](https://learn.microsoft.com/en-us/dotnet/csharp/programming-guide/classes-and-structs/constants).
 
 ```csharp
 const int MAX_HEALTH = 100;
 ```
 
-4. **_camelCase** for member variables (fields).
+4. **_camelCase** for [member variables (fields)](https://learn.microsoft.com/en-us/dotnet/csharp/programming-guide/classes-and-structs/fields).
 
 ```csharp
 private int _playerHealth;
@@ -66,7 +66,7 @@ int sum = a + b;
 
 ## Commenting
 
-1. **Summary Comments**: Use XML comments for public members.
+1. **Summary Comments**: Use [Documentation comments](https://learn.microsoft.com/en-us/dotnet/csharp/language-reference/language-specification/documentation-comments) (XML) for public members.
 
 ```csharp
 /// <summary>
@@ -89,8 +89,8 @@ if (isAlive)
 
 ## Code Structure
 
-1. **Methods**: Keep methods short and focused. Each method should perform a single task.
-2. **Classes**: Follow the Single Responsibility Principle. Each class should have a single responsibility.
+1. **Methods**: Keep [methods](https://learn.microsoft.com/en-us/dotnet/csharp/programming-guide/classes-and-structs/methods) short and focused. Each method should perform a single task.
+2. **Classes**: Follow the [Single Responsibility Principle](https://learn.microsoft.com/en-us/dotnet/architecture/modern-web-apps-azure/architectural-principles#single-responsibility). Each class should have a single responsibility.
 3. **Regions**: Use regions to organize code into logical sections.
 
 ```csharp
@@ -107,7 +107,7 @@ if (isAlive)
 const int MAX_PLAYERS = 4;
 ```
 
-2. **Error Handling**: Use try-catch blocks to handle exceptions gracefully.
+2. **Error Handling**: Use [try-catch blocks](https://learn.microsoft.com/en-us/dotnet/csharp/language-reference/statements/exception-handling-statements) to handle exceptions gracefully.
 
 ```csharp
 try
@@ -120,7 +120,7 @@ catch (Exception ex)
 }
 ```
 
-3. **Access modifiers**: Use access modifiers when declaring fields, properties and methods.
+3. **Access modifiers**: Use [access modifiers](https://learn.microsoft.com/en-us/dotnet/csharp/programming-guide/classes-and-structs/access-modifiers) when declaring fields, properties and methods.
 
 ```csharp
 private int _health = 0;
