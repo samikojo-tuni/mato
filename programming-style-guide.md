@@ -36,7 +36,7 @@ public void UpdateScore(int newScore)
 const int MAX_HEALTH = 100;
 ```
 
-4. **_camelCase** for member variables.
+4. **_camelCase** for member variables (fields).
 
 ```csharp
 private int _playerHealth;
