@@ -44,7 +44,7 @@ private int _playerHealth;
 
 ## Layout and Formatting
 
-1. **Indentation**: Use tabs for indentation. Do not use spaces.
+1. **Indentation**: Use tabs for indentation. Do NOT use spaces.
 2. **Braces**: Place opening braces on a new line.
 
 ```csharp
