@@ -159,4 +159,10 @@ private float _speed = 5.0f;
 private IMover _mover = null;
 ```
 
-5. **Code Reviews**: Regularly review code with peers to ensure quality and consistency.
+5. **Use English**: Game development teams are highly international. Use English
+when naming methods, variables, ect. and when writing comments.
+ 1. Only use [ASCII](https://en.wikipedia.org/wiki/ASCII) characters in your code structures. String literals can 
+ have all types of characters, but using non-ASCII characters e.g. in variable
+ names can have unpredictable effects.
+
+6. **Code Reviews**: Regularly review code with peers to ensure quality and consistency.
