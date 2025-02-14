@@ -157,5 +157,48 @@ namespace SnakeGame
 			int randomIndex = GD.RandRange(0, _freeCells.Count - 1);
 			return _freeCells[randomIndex];
 		}
+
+		/// <summary>
+		/// Returns true, if there is a collectable in the coordinate "gridPosition".
+		/// </summary>
+		/// <param name="gridPosition">A coordinate on a grid.</param>
+		/// <returns>True, if there is a collectable in the coordinate "gridPosition".
+		/// False otherwise.</returns>
+		public bool HasCollectable(Vector2I gridPosition)
+		{
+			if (IsInvalidCoordinate(gridPosition))
+			{
+				// Koordinaatti ei ole laillinen
+				return false;
+			}
+
+			Cell cell = _cells[gridPosition.X, gridPosition.Y];
+			return cell.Occupier.Type == CellOccupierType.Collectable;
+		}
+
+		/// <summary>
+		/// Returns a Collectable object if cell has one.
+		/// </summary>
+		/// <param name="gridPosition">Coordinate of the cell</param>
+		/// <returns>Collectable, if cell has one. Null otherwise.</returns>
+		public Collectable GetCollectable(Vector2I gridPosition)
+		{
+			if (IsInvalidCoordinate(gridPosition))
+			{
+				// Koordinaatti ei ole laillinen
+				return null;
+			}
+
+			Cell cell = _cells[gridPosition.X, gridPosition.Y];
+			// Tarkista, onko Occupier Collectable
+			if (cell.Occupier is Collectable)
+			{
+				// Jos on, palauta se Collectable-tyyppisenä.
+				return cell.Occupier as Collectable;
+			}
+
+			// Muussa tapauksessa palauta tyhjä viittaus.
+			return null;
+		}
 	}
 }

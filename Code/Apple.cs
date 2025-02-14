@@ -16,6 +16,9 @@ namespace SnakeGame
 
 			// Korvaa omena uudella eri sijainnissa
 			Level.Current.ReplaceApple();
+
+			// Korvaa myös negatiivinen ydinjäte.
+			Level.Current.ReplaceNuclearWaste();
 		}
 	}
 }
