@@ -39,6 +39,7 @@ offset_right = 128.0
 offset_bottom = 228.0
 grow_horizontal = 2
 grow_vertical = 2
+mouse_filter = 2
 
 [node name="TopUi" parent="UI" instance=ExtResource("2_7nqqy")]
 layout_mode = 1

@@ -118,6 +118,9 @@ namespace SnakeGame
 
 			// Luo omena
 			ReplaceApple();
+
+			// Replace Nuclear Waste.
+			ReplaceNuclearWaste();
 		}
 
 		public void DestroySnake()
