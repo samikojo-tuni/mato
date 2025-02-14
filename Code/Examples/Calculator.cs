@@ -5,14 +5,12 @@ namespace SnakeGame
 {
 	public partial class Calculator : Node
 	{
-		public int Sum(int a, int b)
+		public override void _Process(double delta)
 		{
-			return a + b;
-		}
-
-		public int Deduct(int a, int b)
-		{
-			return a - b;
+			GD.Print($"A:{1} + B:{4} = {1 + 4}");
+			GD.Print($"A:{1} - B:{4} = {1 - 4}");
+			GD.Print($"A:{1} * B:{4} = {1 * 4}");
+			GD.Print($"A:{1} / B:{4} = {1 / 4}");
 		}
 	}
 }
