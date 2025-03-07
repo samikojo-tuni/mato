@@ -17,6 +17,13 @@ namespace SnakeGame
 
 		[Export] private float _speed = 1;
 		[Export] private Timer _moveTimer = null;
+		// Madon aloituspituus.
+		[Export] private int _length = 3;
+
+		// Viittaukset madon osia kuvaaviin sceneihin
+		[Export] private PackedScene _headScene = null;
+		[Export] private PackedScene _bodyScene = null;
+		[Export] private PackedScene _tailScene = null;
 
 		// TODO: Ei tällaisia kovakoodattuja koordinaatteja!
 		private Vector2I _currentPosition = new Vector2I(5, 5);
@@ -131,6 +138,7 @@ namespace SnakeGame
 					collectable.Collect(this);
 				}
 
+				// TODO: Liikuta matoa osa kerrallaan, eikä koko mato yhtenä pötkönä.
 				_currentPosition = nextPosition;
 				Position = worldPosition;
 				RotationDegrees = GetRotation(direction);

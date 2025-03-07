@@ -1,0 +1,11 @@
+[gd_scene load_steps=3 format=3 uid="uid://du8vuvvs7gicj"]
+
+[ext_resource type="Texture2D" uid="uid://dgoywi6r0iibo" path="res://Art/Snake.png" id="1_wqp1u"]
+[ext_resource type="Script" path="res://Code/SnakePart.cs" id="2_wwq8a"]
+
+[node name="Head" type="Sprite2D"]
+texture = ExtResource("1_wqp1u")
+hframes = 3
+vframes = 3
+script = ExtResource("2_wwq8a")
+PartType = 1
