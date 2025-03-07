@@ -200,5 +200,20 @@ namespace SnakeGame
 			// Muussa tapauksessa palauta tyhjä viittaus.
 			return null;
 		}
+
+		/// <summary>
+		/// Tarkistaa, onko gridPosition koordinaatissa oleva solu vapaa.
+		/// </summary>
+		/// <param name="gridPosition">Koordinaatti gridillä.</param>
+		/// <returns>True, jos solu on gridillä ja se on vapaa. Muuten false.</returns>
+		public bool IsFree(Vector2I gridPosition)
+		{
+			if (IsInvalidCoordinate(gridPosition))
+			{
+				return false;
+			}
+
+			return _cells[gridPosition.X, gridPosition.Y].IsFree;
+		}
 	}
 }

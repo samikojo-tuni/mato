@@ -18,6 +18,7 @@ namespace SnakeGame
 		[Export] private string _appleScenePath = "res://Levels/Collectables/Apple.tscn";
 		[Export] private string _nuclearWasteScenePath = "res://Levels/Collectables/NuclearWaste.tscn";
 		[Export] private TopUIControl _topUIControl = null;
+		[Export] private Vector2I _startPosition = new Vector2I();
 
 		// Sceneviittaukset, joista voidaan luoda olioita.
 		private PackedScene _snakeScene = null;
@@ -112,6 +113,7 @@ namespace SnakeGame
 			// Luo mato
 			_snake = CreateSnake();
 			AddChild(_snake);
+			_snake.CreateSnake(_startPosition);
 
 			// Nollaa pisteet
 			Score = 0;
@@ -121,15 +123,21 @@ namespace SnakeGame
 
 			// Replace Nuclear Waste.
 			ReplaceNuclearWaste();
+
+			_snake.Start();
 		}
 
 		public void DestroySnake()
 		{
 			if (_snake != null)
 			{
-				// Vapauta madon solu gridillä.
-				Vector2I snakePosition = _snake.GridPosition;
-				Grid.ReleaseCell(snakePosition);
+				// TODO: Ehkä johonkin parempaan paikkaan
+				// Mato kuoli, tallenna pisteet
+				HighScore highScore = new HighScore();
+				highScore.AddScore("Player", Score); // TODO: Kysy pelaajan nimeä.
+
+				// Vapauta madon solut gridillä.
+				_snake.ReleaseCells();
 
 				_snake.QueueFree();
 				_snake = null;

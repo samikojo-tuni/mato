@@ -9,6 +9,7 @@
 [node name="Level" type="Node2D" node_paths=PackedStringArray("_topUIControl")]
 script = ExtResource("1_wh52b")
 _topUIControl = NodePath("UI/TopUi")
+_startPosition = Vector2i(5, 5)
 
 [node name="Camera2D" type="Camera2D" parent="."]
 

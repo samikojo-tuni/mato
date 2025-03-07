@@ -1,5 +1,6 @@
 using Godot;
 using System;
+using System.Collections.Generic;
 
 namespace SnakeGame
 {
@@ -25,35 +26,25 @@ namespace SnakeGame
 		[Export] private PackedScene _bodyScene = null;
 		[Export] private PackedScene _tailScene = null;
 
-		// TODO: Ei tällaisia kovakoodattuja koordinaatteja!
-		private Vector2I _currentPosition = new Vector2I(5, 5);
 		// TODO: Onkos tämä nyt hyvää designia?
 		// Liikkeen suunta.
 		private Direction _currentDirection = Direction.Up;
 		// Käyttäjän syötteen suunta.
 		private Direction _inputDirection = Direction.None;
 
+		// Madon osat
+		private SnakePart _head = null;
+		private SnakePart _tail = null;
+		private List<SnakePart> _body = new List<SnakePart>();
+
 		public CellOccupierType Type
 		{
 			get { return CellOccupierType.Snake; }
 		}
 
-		/// <summary>
-		/// Snake's position in Grid's coordinates
-		/// </summary>
-		public Vector2I GridPosition
-		{
-			get { return _currentPosition; }
-		}
-
 		// Called when the node enters the scene tree for the first time.
 		public override void _Ready()
 		{
-			if (Level.Current.Grid.GetWorldPosition(_currentPosition, out Vector2 worldPosition))
-			{
-				Position = worldPosition;
-			}
-
 			if (_moveTimer == null)
 			{
 				_moveTimer = GetNode<Timer>("MoveTimer");
@@ -62,11 +53,6 @@ namespace SnakeGame
 				{
 					GD.PrintErr("Move timer cannot be found!");
 				}
-			}
-
-			if (_moveTimer != null)
-			{
-				_moveTimer.Start();
 			}
 		}
 
@@ -99,6 +85,100 @@ namespace SnakeGame
 			}
 		}
 
+		/// <summary>
+		/// Luo madon. Mato luodaan gridPositionin kuvaamaan sijaintiin.
+		/// </summary>
+		/// <param name="gridPosition">Sijainti koordinaatistossa.</param>
+		/// <returns>True, jos madon luominen onnistuu. False muuten.</returns>
+		public bool CreateSnake(Vector2I gridPosition)
+		{
+			// Luo pää
+			_head = AddBodyPart(SnakePart.SnakePartType.Head, gridPosition);
+			if (_head == null)
+			{
+				// Pään luominen epäonnistui!
+				return false;
+			}
+
+			// Madon pituus tällä hetkellä.
+
+			// Silmukassa, luo riittävä määrä keskiosia
+			int currentLength = 1;
+			while (currentLength < _length - 1)
+			{
+				currentLength++; // Muista kasvattaa ehtomuuttujan arvoa, muuten tuloksena on ikuinen silmukka.
+				gridPosition.Y++;
+				SnakePart body = AddBodyPart(SnakePart.SnakePartType.Body, gridPosition);
+				if (body == null)
+				{
+					return false;
+				}
+
+				_body.Add(body);
+			}
+
+			// Luo häntä
+			gridPosition.Y++;
+			_tail = AddBodyPart(SnakePart.SnakePartType.Tail, gridPosition);
+
+			return _tail != null;
+		}
+
+		private SnakePart AddBodyPart(SnakePart.SnakePartType type, Vector2I gridPosition)
+		{
+			if (!Level.Current.Grid.IsFree(gridPosition))
+			{
+				// Palauttaa tyhjän viittauksen, jos madon osaa ei voida luoda tähän koordinaattiin.
+				return null;
+			}
+
+			SnakePart part = null;
+			switch (type)
+			{
+				case SnakePart.SnakePartType.Head:
+					part = _headScene.Instantiate<SnakePart>();
+					break;
+				case SnakePart.SnakePartType.Body:
+					part = _bodyScene.Instantiate<SnakePart>();
+					break;
+				case SnakePart.SnakePartType.Tail:
+					part = _tailScene.Instantiate<SnakePart>();
+					break;
+			}
+
+			if (part != null)
+			{
+				AddChild(part);
+				if (!part.SetPosition(gridPosition))
+				{
+					GD.PrintErr("Solun varaus epäonnistui!");
+				}
+			}
+
+			return part;
+		}
+
+		/// <summary>
+		/// Vapauttaa madon gridistä varaamat solut.
+		/// </summary>
+		public void ReleaseCells()
+		{
+			Level.Current.Grid.ReleaseCell(_head.GridPosition);
+			foreach (SnakePart bodyPart in _body)
+			{
+				Level.Current.Grid.ReleaseCell(bodyPart.GridPosition);
+			}
+			Level.Current.Grid.ReleaseCell(_tail.GridPosition);
+		}
+
+		public void Start()
+		{
+			if (_moveTimer != null)
+			{
+				_moveTimer.Start();
+			}
+		}
+
 		private Direction ValidateInput(Direction inputDirection, Direction currentDirection)
 		{
 			switch (currentDirection)
@@ -126,7 +206,7 @@ namespace SnakeGame
 
 		private void Move(Direction direction)
 		{
-			Vector2I nextPosition = GetNextGridPosition(direction, _currentPosition);
+			Vector2I nextPosition = GetNextGridPosition(direction, _head.GridPosition);
 			if (Level.Current.Grid.GetWorldPosition(nextPosition, out Vector2 worldPosition))
 			{
 				// Liikkuminen sallittu.
@@ -138,17 +218,23 @@ namespace SnakeGame
 					collectable.Collect(this);
 				}
 
-				// TODO: Liikuta matoa osa kerrallaan, eikä koko mato yhtenä pötkönä.
-				_currentPosition = nextPosition;
-				Position = worldPosition;
-				RotationDegrees = GetRotation(direction);
+				MoveSnake(nextPosition);
 			}
 		}
 
-		private void Move(Direction direction, float delta)
+		private void MoveSnake(Vector2I nextPosition)
 		{
-			Vector2 directionVector = GetDirectionVector(direction);
-			Translate(directionVector * _speed * delta);
+			ReleaseCells();
+			_tail.SetPosition(_body[_body.Count - 1].GridPosition);
+
+			for (int i = _body.Count - 1; i > 0; --i)
+			{
+				_body[i].SetPosition(_body[i - 1].GridPosition);
+			}
+
+			_body[0].SetPosition(_head.GridPosition);
+
+			_head.SetPosition(nextPosition);
 		}
 
 		private Vector2I GetNextGridPosition(Direction direction, Vector2I currentPosition)

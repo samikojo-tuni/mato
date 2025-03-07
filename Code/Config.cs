@@ -6,5 +6,7 @@ namespace SnakeGame
 		public const string MoveDownAction = "MoveDown";
 		public const string MoveLeftAction = "MoveLeft";
 		public const string MoveRightAction = "MoveRight";
+
+		public const string HighScoreFile = "user://highscore.csv";
 	}
 }
