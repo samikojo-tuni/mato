@@ -11,6 +11,7 @@ anchor_bottom = 1.0
 offset_bottom = -356.0
 grow_horizontal = 2
 grow_vertical = 2
+mouse_filter = 2
 script = ExtResource("1_xxmp4")
 _scoreLabel = NodePath("VBoxContainer/HBoxContainer/ScoreLabel")
 _restartButton = NodePath("VBoxContainer/HBoxContainer/RestartButton")

@@ -1,15 +1,17 @@
-[gd_scene load_steps=6 format=4 uid="uid://cra40mujgqvmt"]
+[gd_scene load_steps=7 format=4 uid="uid://cra40mujgqvmt"]
 
 [ext_resource type="TileSet" uid="uid://jr8hmhq2xmtw" path="res://Art/MapTimes.tres" id="1_tg07n"]
 [ext_resource type="Script" path="res://Code/Level.cs" id="1_wh52b"]
 [ext_resource type="PackedScene" uid="uid://dsq42udh57yuu" path="res://GUI/Scenes/TopUI.tscn" id="2_7nqqy"]
 [ext_resource type="PackedScene" uid="uid://cyxrb7jg6ft2j" path="res://GUI/Scenes/BottomUI.tscn" id="2_hukud"]
 [ext_resource type="PackedScene" uid="uid://cfjsuvcfb1s5w" path="res://Levels/Grid/Grid.tscn" id="2_lwsbv"]
+[ext_resource type="PackedScene" uid="uid://6cxdwp2jka8k" path="res://GUI/Scenes/InputDialog.tscn" id="6_te73e"]
 
-[node name="Level" type="Node2D" node_paths=PackedStringArray("_topUIControl")]
+[node name="Level" type="Node2D" node_paths=PackedStringArray("_topUIControl", "_nameInput")]
 script = ExtResource("1_wh52b")
 _topUIControl = NodePath("UI/TopUi")
 _startPosition = Vector2i(5, 5)
+_nameInput = NodePath("UI/NameDialog")
 
 [node name="Camera2D" type="Camera2D" parent="."]
 
@@ -30,6 +32,7 @@ tile_set = ExtResource("1_tg07n")
 top_level = true
 
 [node name="UI" type="Control" parent="."]
+z_index = 10
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -47,3 +50,13 @@ layout_mode = 1
 
 [node name="BottomUi" parent="UI" instance=ExtResource("2_hukud")]
 layout_mode = 1
+
+[node name="NameDialog" parent="UI" instance=ExtResource("6_te73e")]
+layout_mode = 1
+_defaultHeadline = "Anna nimesi"
+
+[node name="Panel" parent="UI/NameDialog" index="0"]
+offset_top = 128.0
+offset_bottom = 328.0
+
+[editable path="UI/NameDialog"]

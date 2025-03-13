@@ -1,0 +1,77 @@
+[gd_scene load_steps=3 format=3 uid="uid://cix7y0cwn1rwg"]
+
+[ext_resource type="Script" path="res://Code/UI/DialogWindow.cs" id="1_1lk6b"]
+[ext_resource type="Theme" uid="uid://be1rladxy7241" path="res://GUI/UI-Theme.tres" id="1_i7p8e"]
+
+[node name="Control" type="Control" node_paths=PackedStringArray("_headlineLabel", "_textLabel", "_okButton", "_cancelButton")]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_1lk6b")
+_headlineLabel = NodePath("Panel/Headline")
+_textLabel = NodePath("Panel/Label")
+_okButton = NodePath("Panel/HBoxContainer/OKButton")
+_cancelButton = NodePath("Panel/HBoxContainer/CancelButton")
+_openOnStart = false
+
+[node name="Panel" type="Panel" parent="."]
+layout_mode = 1
+anchors_preset = 10
+anchor_right = 1.0
+offset_bottom = 200.0
+grow_horizontal = 2
+theme = ExtResource("1_i7p8e")
+
+[node name="Headline" type="Label" parent="Panel"]
+layout_mode = 1
+anchors_preset = 10
+anchor_right = 1.0
+offset_left = 4.0
+offset_top = 4.0
+offset_right = -4.0
+offset_bottom = 29.0
+grow_horizontal = 2
+theme = ExtResource("1_i7p8e")
+theme_override_font_sizes/font_size = 22
+text = "Headline"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Label" type="Label" parent="Panel"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 4.0
+offset_top = 29.0
+offset_right = -4.0
+offset_bottom = -39.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="HBoxContainer" type="HBoxContainer" parent="Panel"]
+custom_minimum_size = Vector2(52.43, 0)
+layout_mode = 1
+anchors_preset = 12
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 4.0
+offset_top = -39.0
+offset_right = -4.0
+offset_bottom = -4.0
+grow_horizontal = 2
+grow_vertical = 0
+alignment = 1
+
+[node name="OKButton" type="Button" parent="Panel/HBoxContainer"]
+layout_mode = 2
+text = "OK"
+
+[node name="CancelButton" type="Button" parent="Panel/HBoxContainer"]
+layout_mode = 2
+text = "Cancel
+"

@@ -1,0 +1,22 @@
+[gd_scene load_steps=3 format=3 uid="uid://6cxdwp2jka8k"]
+
+[ext_resource type="PackedScene" uid="uid://cix7y0cwn1rwg" path="res://GUI/Scenes/DialogWindow.tscn" id="1_o5tol"]
+[ext_resource type="Script" path="res://Code/UI/InputDialog.cs" id="2_w82ag"]
+
+[node name="Control" node_paths=PackedStringArray("_inputField") instance=ExtResource("1_o5tol")]
+script = ExtResource("2_w82ag")
+_inputField = NodePath("Panel/LineEdit")
+
+[node name="Label" parent="Panel" index="1"]
+visible = false
+
+[node name="LineEdit" type="LineEdit" parent="Panel" index="3"]
+layout_mode = 1
+anchors_preset = 10
+anchor_right = 1.0
+offset_left = 4.0
+offset_top = 29.0
+offset_right = -4.0
+offset_bottom = 55.0
+grow_horizontal = 2
+placeholder_text = "Anna nimesi"

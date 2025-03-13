@@ -8,5 +8,7 @@ namespace SnakeGame
 		public const string MoveRightAction = "MoveRight";
 
 		public const string HighScoreFile = "user://highscore.csv";
+		public const string SaveFolder = "Save";
+		public const string QuickSaveFile = "quicksave.json";
 	}
 }

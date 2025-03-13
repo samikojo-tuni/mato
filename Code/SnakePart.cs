@@ -1,5 +1,6 @@
-using Godot;
+using System;
 using System.Collections.Generic;
+using Godot;
 
 namespace SnakeGame
 {
@@ -81,6 +82,36 @@ namespace SnakeGame
 
 			// Ei liikuta mihinkään.
 			return Snake.Direction.None;
+		}
+
+		public Godot.Collections.Dictionary Save()
+		{
+			Godot.Collections.Dictionary saveData = new Godot.Collections.Dictionary();
+			Godot.Collections.Dictionary positionData = new Godot.Collections.Dictionary()
+			{
+				{ "X", GridPosition.X },
+				{ "Y", GridPosition.Y }
+			};
+			saveData.Add("Position", positionData);
+			saveData.Add("Rotation", RotationDegrees);
+
+			return saveData;
+		}
+
+		public bool Load(Godot.Collections.Dictionary saveData)
+		{
+			Godot.Collections.Dictionary positionData = (Godot.Collections.Dictionary)saveData["Position"];
+			if (positionData != null)
+			{
+				Vector2I gridPosition = new Vector2I((int)positionData["X"], (int)positionData["Y"]);
+				if (SetPosition(gridPosition))
+				{
+					RotationDegrees = (float)saveData["Rotation"];
+					return true;
+				}
+			}
+
+			return false;
 		}
 	}
 }

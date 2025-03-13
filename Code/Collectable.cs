@@ -1,4 +1,5 @@
 using Godot;
+using Godot.Collections;
 
 namespace SnakeGame
 {
@@ -34,5 +35,30 @@ namespace SnakeGame
 		}
 
 		public abstract void Collect(Snake snake);
+
+		public Dictionary Save()
+		{
+			Dictionary saveData = new Dictionary();
+			Dictionary positionData = new Dictionary()
+			{
+				{ "X", GridPosition.X },
+				{ "Y", GridPosition.Y }
+			};
+			saveData.Add("Position", positionData);
+
+			return saveData;
+		}
+
+		public bool Load(Dictionary saveData)
+		{
+			Dictionary positionData = (Dictionary)saveData["Position"];
+			if (positionData != null)
+			{
+				Vector2I gridPosition = new Vector2I((int)positionData["X"], (int)positionData["Y"]);
+				return Grid.OccupyCell(this, gridPosition) && SetPosition(gridPosition);
+			}
+
+			return false;
+		}
 	}
 }

@@ -1,5 +1,5 @@
-using Godot;
 using System;
+using Godot;
 
 namespace SnakeGame
 {
@@ -7,7 +7,7 @@ namespace SnakeGame
 	{
 		public override void Collect(Snake snake)
 		{
-			Level.Current.DestroySnake();
+			snake.Die();
 		}
 	}
 }

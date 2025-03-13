@@ -1,6 +1,8 @@
-using Godot;
-using SnakeGame.UI;
 using System;
+using System.IO;
+using Godot;
+using Godot.Collections;
+using SnakeGame.UI;
 
 namespace SnakeGame
 {
@@ -19,6 +21,7 @@ namespace SnakeGame
 		[Export] private string _nuclearWasteScenePath = "res://Levels/Collectables/NuclearWaste.tscn";
 		[Export] private TopUIControl _topUIControl = null;
 		[Export] private Vector2I _startPosition = new Vector2I();
+		[Export] private InputDialog _nameInput = null;
 
 		// Sceneviittaukset, joista voidaan luoda olioita.
 		private PackedScene _snakeScene = null;
@@ -82,7 +85,40 @@ namespace SnakeGame
 				GD.PrintErr("Gridiä ei löytynyt Levelin lapsinodeista!");
 			}
 
+			if (_nameInput != null)
+			{
+				_nameInput.Close();
+				_nameInput.Connect(InputDialog.SignalName.DialogClosed, new Callable(this, nameof(OnDialogClosed)));
+			}
+
 			ResetGame();
+		}
+
+		public override void _Process(double delta)
+		{
+			if (Input.IsActionJustPressed("QuickSave"))
+			{
+				Save();
+			}
+			if (Input.IsActionJustPressed("QuickLoad"))
+			{
+				if (Load())
+				{
+					GD.Print("Peli ladattu!");
+					_nameInput.Close();
+
+					_snake.Start();
+				}
+			}
+		}
+
+		private void OnDialogClosed(bool ok)
+		{
+			if (ok)
+			{
+				HighScore highScore = new HighScore();
+				highScore.AddScore(_nameInput.GetInput(), Score);
+			}
 		}
 
 		private Snake CreateSnake()
@@ -127,15 +163,19 @@ namespace SnakeGame
 			_snake.Start();
 		}
 
+		public void GameOver()
+		{
+			// Avaa name dialogi.
+			if (_nameInput != null)
+			{
+				_nameInput.Open();
+			}
+		}
+
 		public void DestroySnake()
 		{
 			if (_snake != null)
 			{
-				// TODO: Ehkä johonkin parempaan paikkaan
-				// Mato kuoli, tallenna pisteet
-				HighScore highScore = new HighScore();
-				highScore.AddScore("Player", Score); // TODO: Kysy pelaajan nimeä.
-
 				// Vapauta madon solut gridillä.
 				_snake.ReleaseCells();
 
@@ -146,28 +186,12 @@ namespace SnakeGame
 
 		public void ReplaceNuclearWaste()
 		{
-			if (_nuclearWaste != null)
+			DestroyNuclearWaste();
+			bool nuclearWasteCreated = CreateNuclearWaste();
+			if (!nuclearWasteCreated)
 			{
-				Grid.ReleaseCell(_nuclearWaste.GridPosition);
-
-				_nuclearWaste.QueueFree();
-				_nuclearWaste = null;
+				return;
 			}
-
-			// ladataan skene vasta, kun sitä tarvitaan ensimmäisen kerran.
-			// Tätä kutsutaan lazy loadingiksi.
-			if (_nuclearWasteScene == null)
-			{
-				_nuclearWasteScene = ResourceLoader.Load<PackedScene>(_nuclearWasteScenePath);
-				if (_nuclearWasteScene == null)
-				{
-					GD.PrintErr("Can't load Nuclear Waste scene!");
-					return;
-				}
-			}
-
-			_nuclearWaste = _nuclearWasteScene.Instantiate<NuclearWaste>();
-			AddChild(_nuclearWaste);
 
 			Cell freeCell = Grid.GetRandomFreeCell();
 			if (Grid.OccupyCell(_nuclearWaste, freeCell.GridPosition))
@@ -176,30 +200,33 @@ namespace SnakeGame
 			}
 		}
 
-		public void ReplaceApple()
+		private bool CreateNuclearWaste()
 		{
-			if (_apple != null)
-			{
-				Grid.ReleaseCell(_apple.GridPosition);
-
-				_apple.QueueFree();
-				_apple = null;
-			}
-
-			// ladataan omena-skene vasta, kun sitä tarvitaan ensimmäisen kerran.
+			// ladataan skene vasta, kun sitä tarvitaan ensimmäisen kerran.
 			// Tätä kutsutaan lazy loadingiksi.
-			if (_appleScene == null)
+			if (_nuclearWasteScene == null)
 			{
-				_appleScene = ResourceLoader.Load<PackedScene>(_appleScenePath);
-				if (_appleScene == null)
+				_nuclearWasteScene = ResourceLoader.Load<PackedScene>(_nuclearWasteScenePath);
+				if (_nuclearWasteScene == null)
 				{
-					GD.PrintErr("Can't load apple scene!");
-					return;
+					GD.PrintErr("Can't load Nuclear Waste scene!");
+					return false;
 				}
 			}
 
-			_apple = _appleScene.Instantiate<Apple>();
-			AddChild(_apple);
+			_nuclearWaste = _nuclearWasteScene.Instantiate<NuclearWaste>();
+			AddChild(_nuclearWaste);
+			return true;
+		}
+
+		public void ReplaceApple()
+		{
+			DestroyApple();
+			bool appleCreated = CreateApple();
+			if (!appleCreated)
+			{
+				return;
+			}
 
 			Cell freeCell = Grid.GetRandomFreeCell();
 			if (Grid.OccupyCell(_apple, freeCell.GridPosition))
@@ -208,6 +235,186 @@ namespace SnakeGame
 			}
 		}
 
+		private bool CreateApple()
+		{
+			// ladataan omena-skene vasta, kun sitä tarvitaan ensimmäisen kerran.
+			// Tätä kutsutaan lazy loadingiksi.
+			if (_appleScene == null)
+			{
+				_appleScene = ResourceLoader.Load<PackedScene>(_appleScenePath);
+				if (_appleScene == null)
+				{
+					GD.PrintErr("Can't load apple scene!");
+					return false;
+				}
+			}
+
+			_apple = _appleScene.Instantiate<Apple>();
+			AddChild(_apple);
+			return true;
+		}
+
+		private void DestroySpawns()
+		{
+			DestroyApple();
+			DestroyNuclearWaste();
+		}
+
+		private void DestroyNuclearWaste()
+		{
+			if (_nuclearWaste != null)
+			{
+				Grid.ReleaseCell(_nuclearWaste.GridPosition);
+
+				_nuclearWaste.QueueFree();
+				_nuclearWaste = null;
+			}
+		}
+
+		private void DestroyApple()
+		{
+			if (_apple != null)
+			{
+				Grid.ReleaseCell(_apple.GridPosition);
+
+				_apple.QueueFree();
+				_apple = null;
+			}
+		}
+
+		public bool Load()
+		{
+			string savePath = ProjectSettings.GlobalizePath("user://");
+			savePath = Path.Combine(savePath, Config.SaveFolder);
+			string loadedJson = LoadFromFile(savePath, Config.QuickSaveFile);
+
+			Json jsonLoader = new Json();
+			Error loadError = jsonLoader.Parse(loadedJson);
+			if (loadError != Error.Ok)
+			{
+				GD.PrintErr($"Virhe ladattaessa peliä! Virhe: {loadError}");
+				return false;
+			}
+
+			Dictionary saveData = (Dictionary)jsonLoader.Data;
+			Dictionary snakeData = (Dictionary)saveData["Snake"];
+			Dictionary appleData = (Dictionary)saveData["Apple"];
+			Dictionary nuclearWasteData = (Dictionary)saveData["NuclearWaste"];
+			Score = (int)saveData["Score"];
+
+			DestroySnake();
+			DestroySpawns();
+
+			if (!CreateApple())
+			{
+				GD.PrintErr("Omenan luonti epäonnistui!");
+				return false;
+			}
+
+			if (!CreateNuclearWaste())
+			{
+				GD.PrintErr("Ydinjätteen luonti epäonnistui!");
+				return false;
+			}
+
+			_snake = CreateSnake();
+			AddChild(_snake);
+
+			if (!_snake.Load(snakeData))
+			{
+				GD.PrintErr("Madon lataus epäonnistui!");
+				return false;
+			}
+
+			if (!_apple.Load(appleData))
+			{
+				GD.PrintErr("Omenan lataus epäonnistui!");
+				return false;
+			}
+
+			if (!_nuclearWaste.Load(nuclearWasteData))
+			{
+				GD.PrintErr("Ydinjätteen lataus epäonnistui!");
+				return false;
+			}
+
+			return true;
+		}
+
+		public void Save()
+		{
+			Dictionary saveData = new Dictionary();
+			saveData.Add("Score", Score);
+			saveData.Add("Snake", _snake.Save());
+			saveData.Add("Apple", _apple.Save());
+			saveData.Add("NuclearWaste", _nuclearWaste.Save());
+
+			string json = Json.Stringify(saveData);
+
+			string savePath = ProjectSettings.GlobalizePath("user://");
+			savePath = Path.Combine(savePath, Config.SaveFolder);
+
+			if (SaveToFile(savePath, Config.QuickSaveFile, json))
+			{
+				GD.Print("Peli tallennettu!");
+			}
+			else
+			{
+				GD.PrintErr("Pelin tallennus epäonnistui!");
+			}
+		}
+
 		#endregion
+
+		public string LoadFromFile(string path, string fileName)
+		{
+			path = Path.Combine(path, fileName);
+
+			if (!File.Exists(path))
+			{
+				GD.PrintErr($"Tiedostoa {path} ei löytynyt!");
+				return null;
+			}
+
+			try
+			{
+				return File.ReadAllText(path);
+			}
+			catch (Exception e)
+			{
+				GD.PrintErr($"Virhe ladattaessa tiedostoa: {e.Message}");
+				return null;
+			}
+		}
+
+		private bool SaveToFile(string path, string fileName, string json)
+		{
+			if (!Directory.Exists(path))
+			{
+				try
+				{
+					Directory.CreateDirectory(path);
+				}
+				catch (Exception e)
+				{
+					GD.PrintErr($"Virhe tallennettaessa tiedostoa: {e.Message}");
+					return false;
+				}
+			}
+
+			path = Path.Combine(path, fileName);
+
+			try
+			{
+				File.WriteAllText(path, json);
+			}
+			catch (Exception e)
+			{
+				GD.PrintErr($"Virhe tallennettaessa tiedostoa: {e.Message}");
+				return false;
+			}
+
+			return true;
+		}
 	}
 }

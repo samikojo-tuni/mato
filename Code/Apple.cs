@@ -1,5 +1,6 @@
-using Godot;
 using System;
+using Godot;
+using Godot.Collections;
 
 namespace SnakeGame
 {
@@ -9,7 +10,7 @@ namespace SnakeGame
 
 		public override void Collect(Snake snake)
 		{
-			// TODO: Kasvata matoa
+			snake.Grow();
 
 			// Pisteitä ylläpidetään Levelissä. Kasvata Scorea _scoren verran.
 			Level.Current.Score += _score;

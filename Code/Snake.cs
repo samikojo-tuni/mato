@@ -1,6 +1,7 @@
-using Godot;
 using System;
 using System.Collections.Generic;
+using Godot;
+using Godot.Collections;
 
 namespace SnakeGame
 {
@@ -36,6 +37,8 @@ namespace SnakeGame
 		private SnakePart _head = null;
 		private SnakePart _tail = null;
 		private List<SnakePart> _body = new List<SnakePart>();
+		private bool _shouldGrow = false;
+		private bool _isDead = false;
 
 		public CellOccupierType Type
 		{
@@ -59,6 +62,11 @@ namespace SnakeGame
 		// Called every frame. 'delta' is the elapsed time since the previous frame.
 		public override void _Process(double delta)
 		{
+			if (_isDead)
+			{
+				return;
+			}
+
 			Direction direction = ReadInput();
 			if (direction != Direction.None)
 			{
@@ -80,8 +88,11 @@ namespace SnakeGame
 					Move(_currentDirection);
 				}
 
-				// Parametrin nimeäminen auttaa luettavuutta merkittävästi
-				_moveTimer.Reset(autoStart: true);
+				if (!_isDead)
+				{
+					// Parametrin nimeäminen auttaa luettavuutta merkittävästi
+					_moveTimer.Reset(autoStart: true);
+				}
 			}
 		}
 
@@ -124,6 +135,13 @@ namespace SnakeGame
 			return _tail != null;
 		}
 
+		public void Die()
+		{
+			_isDead = true;
+			_moveTimer.Stop();
+			Level.Current.GameOver();
+		}
+
 		private SnakePart AddBodyPart(SnakePart.SnakePartType type, Vector2I gridPosition)
 		{
 			if (!Level.Current.Grid.IsFree(gridPosition))
@@ -132,6 +150,21 @@ namespace SnakeGame
 				return null;
 			}
 
+			SnakePart part = CreateSnakePart(type);
+
+			if (part != null)
+			{
+				if (!part.SetPosition(gridPosition))
+				{
+					GD.PrintErr("Solun varaus epäonnistui!");
+				}
+			}
+
+			return part;
+		}
+
+		private SnakePart CreateSnakePart(SnakePart.SnakePartType type)
+		{
 			SnakePart part = null;
 			switch (type)
 			{
@@ -149,10 +182,6 @@ namespace SnakeGame
 			if (part != null)
 			{
 				AddChild(part);
-				if (!part.SetPosition(gridPosition))
-				{
-					GD.PrintErr("Solun varaus epäonnistui!");
-				}
 			}
 
 			return part;
@@ -173,10 +202,16 @@ namespace SnakeGame
 
 		public void Start()
 		{
+			_isDead = false;
 			if (_moveTimer != null)
 			{
 				_moveTimer.Start();
 			}
+		}
+
+		public void Grow()
+		{
+			_shouldGrow = true;
 		}
 
 		private Direction ValidateInput(Direction inputDirection, Direction currentDirection)
@@ -220,21 +255,41 @@ namespace SnakeGame
 
 				MoveSnake(nextPosition);
 			}
+			else
+			{
+				// Liikkuminen ei onnistunut. Mato osui seinään.
+				Die();
+			}
 		}
 
 		private void MoveSnake(Vector2I nextPosition)
 		{
-			ReleaseCells();
-			_tail.SetPosition(_body[_body.Count - 1].GridPosition);
-
-			for (int i = _body.Count - 1; i > 0; --i)
+			if (!_shouldGrow)
 			{
-				_body[i].SetPosition(_body[i - 1].GridPosition);
+				ReleaseCells();
+				_tail.SetPosition(_body[_body.Count - 1].GridPosition);
+
+				for (int i = _body.Count - 1; i > 0; --i)
+				{
+					_body[i].SetPosition(_body[i - 1].GridPosition);
+				}
+
+				_body[0].SetPosition(_head.GridPosition);
+
+				_head.SetPosition(nextPosition);
 			}
+			else
+			{
+				// Kun mato kasvaa, vain päätä liikutetaan. Pään edelliseen sijaintiin luodaan uusi
+				// madon keskivartalon osa.
+				Level.Current.Grid.ReleaseCell(_head.GridPosition);
+				Vector2I previousHeadPosition = _head.GridPosition;
+				_head.SetPosition(nextPosition);
 
-			_body[0].SetPosition(_head.GridPosition);
-
-			_head.SetPosition(nextPosition);
+				SnakePart newBodyPart = AddBodyPart(SnakePart.SnakePartType.Body, previousHeadPosition);
+				_body.Insert(0, newBodyPart);
+				_shouldGrow = false;
+			}
 		}
 
 		private Vector2I GetNextGridPosition(Direction direction, Vector2I currentPosition)
@@ -295,6 +350,54 @@ namespace SnakeGame
 			}
 
 			return direction;
+		}
+
+		public Dictionary Save()
+		{
+			Dictionary saveData = new Dictionary();
+			saveData.Add("Head", _head.Save());
+			saveData.Add("Tail", _tail.Save());
+
+			Godot.Collections.Array bodyData = new Godot.Collections.Array();
+			foreach (SnakePart bodyPart in _body)
+			{
+				bodyData.Add(bodyPart.Save());
+			}
+			saveData.Add("Body", bodyData);
+
+			return saveData;
+		}
+
+		public bool Load(Dictionary snakeData)
+		{
+			_head = CreateSnakePart(SnakePart.SnakePartType.Head);
+			if (_head == null || !_head.Load((Dictionary)snakeData["Head"]))
+			{
+				GD.PrintErr("Head loading failed!");
+				return false;
+			}
+
+			_tail = CreateSnakePart(SnakePart.SnakePartType.Tail);
+			if (_tail == null || !_tail.Load((Dictionary)snakeData["Tail"]))
+			{
+				GD.PrintErr("Tail loading failed!");
+				return false;
+			}
+
+			Godot.Collections.Array bodyData = (Godot.Collections.Array)snakeData["Body"];
+			foreach (Dictionary bodyPartData in bodyData)
+			{
+				SnakePart bodyPart = CreateSnakePart(SnakePart.SnakePartType.Body);
+				if (bodyPart == null || !bodyPart.Load(bodyPartData))
+				{
+					GD.PrintErr("Body part loading failed!");
+					return false;
+				}
+
+				_body.Add(bodyPart);
+			}
+
+			return true;
 		}
 	}
 }
