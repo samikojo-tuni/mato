@@ -20,6 +20,9 @@ namespace SnakeGame
 
 			// Korvaa myös negatiivinen ydinjäte.
 			Level.Current.ReplaceNuclearWaste();
+
+			// Toista keräysaudio
+			Level.Current.PlayAudioEffect(Level.EffectType.Collect);
 		}
 	}
 }

@@ -140,6 +140,7 @@ namespace SnakeGame
 			_isDead = true;
 			_moveTimer.Stop();
 			Level.Current.GameOver();
+			Level.Current.PlayAudioEffect(Level.EffectType.Death);
 		}
 
 		private SnakePart AddBodyPart(SnakePart.SnakePartType type, Vector2I gridPosition)

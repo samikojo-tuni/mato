@@ -1,4 +1,4 @@
-[gd_scene load_steps=8 format=4 uid="uid://cra40mujgqvmt"]
+[gd_scene load_steps=10 format=4 uid="uid://cra40mujgqvmt"]
 
 [ext_resource type="TileSet" uid="uid://jr8hmhq2xmtw" path="res://Art/MapTimes.tres" id="1_tg07n"]
 [ext_resource type="Script" path="res://Code/Level.cs" id="1_wh52b"]
@@ -7,13 +7,17 @@
 [ext_resource type="PackedScene" uid="uid://bcwb660lpxvo4" path="res://Levels/Effects/CollectEffect.tscn" id="2_i6e2p"]
 [ext_resource type="PackedScene" uid="uid://cfjsuvcfb1s5w" path="res://Levels/Grid/Grid.tscn" id="2_lwsbv"]
 [ext_resource type="PackedScene" uid="uid://6cxdwp2jka8k" path="res://GUI/Scenes/InputDialog.tscn" id="6_te73e"]
+[ext_resource type="AudioStream" uid="uid://dgajjrc6lho38" path="res://Audio/collect.wav" id="8_uf5aw"]
+[ext_resource type="AudioStream" uid="uid://drsywwuaj1gsu" path="res://Audio/death.ogg" id="9_vow1s"]
 
-[node name="Level" type="Node2D" node_paths=PackedStringArray("_topUIControl", "_nameInput")]
+[node name="Level" type="Node2D" node_paths=PackedStringArray("_topUIControl", "_nameInput", "_deathSound", "_collectSound")]
 script = ExtResource("1_wh52b")
 _topUIControl = NodePath("UI/TopUi")
 _startPosition = Vector2i(5, 5)
 _nameInput = NodePath("UI/NameDialog")
 _collectEffectScene = ExtResource("2_i6e2p")
+_deathSound = NodePath("Audio/DeathAudio")
+_collectSound = NodePath("Audio/CollectAudio")
 
 [node name="Camera2D" type="Camera2D" parent="."]
 
@@ -61,5 +65,18 @@ _defaultHeadline = "Anna nimesi"
 [node name="Panel" parent="UI/NameDialog" index="0"]
 offset_top = 128.0
 offset_bottom = 328.0
+
+[node name="Audio" type="Node" parent="."]
+
+[node name="CollectAudio" type="AudioStreamPlayer2D" parent="Audio"]
+stream = ExtResource("8_uf5aw")
+bus = &"SFX"
+
+[node name="DeathAudio" type="AudioStreamPlayer2D" parent="Audio"]
+stream = ExtResource("9_vow1s")
+bus = &"SFX"
+
+[node name="AudioListener2D" type="AudioListener2D" parent="."]
+current = true
 
 [editable path="UI/NameDialog"]

@@ -8,6 +8,13 @@ namespace SnakeGame
 {
 	public partial class Level : Node2D
 	{
+		public enum EffectType
+		{
+			None = 0,
+			Collect,
+			Death,
+		}
+
 		// Static on luokan ominaisuus, ei siitä luotujen olioiden.
 		// Kaikki luokasta luodut olio jakavat saman staattisen muuttujan.
 		private static Level _current = null;
@@ -23,6 +30,8 @@ namespace SnakeGame
 		[Export] private Vector2I _startPosition = new Vector2I();
 		[Export] private InputDialog _nameInput = null;
 		[Export] private PackedScene _collectEffectScene = null;
+		[Export] private AudioStreamPlayer2D _deathSound = null;
+		[Export] private AudioStreamPlayer2D _collectSound = null;
 
 		// Sceneviittaukset, joista voidaan luoda olioita.
 		private PackedScene _snakeScene = null;
@@ -141,6 +150,27 @@ namespace SnakeGame
 		}
 
 		#region Public methods
+
+		public void PlayAudioEffect(EffectType effectType)
+		{
+			switch (effectType)
+			{
+				case EffectType.Collect:
+					if (_collectSound != null)
+					{
+						_collectSound.Play();
+					}
+					break;
+				case EffectType.Death:
+					if (_deathSound != null)
+					{
+						_deathSound.Play();
+					}
+					break;
+				default:
+					break;
+			}
+		}
 
 		public bool ShowCollectEffect(Vector2 position)
 		{
