@@ -1,9 +1,10 @@
-[gd_scene load_steps=7 format=4 uid="uid://cra40mujgqvmt"]
+[gd_scene load_steps=8 format=4 uid="uid://cra40mujgqvmt"]
 
 [ext_resource type="TileSet" uid="uid://jr8hmhq2xmtw" path="res://Art/MapTimes.tres" id="1_tg07n"]
 [ext_resource type="Script" path="res://Code/Level.cs" id="1_wh52b"]
 [ext_resource type="PackedScene" uid="uid://dsq42udh57yuu" path="res://GUI/Scenes/TopUI.tscn" id="2_7nqqy"]
 [ext_resource type="PackedScene" uid="uid://cyxrb7jg6ft2j" path="res://GUI/Scenes/BottomUI.tscn" id="2_hukud"]
+[ext_resource type="PackedScene" uid="uid://bcwb660lpxvo4" path="res://Levels/Effects/CollectEffect.tscn" id="2_i6e2p"]
 [ext_resource type="PackedScene" uid="uid://cfjsuvcfb1s5w" path="res://Levels/Grid/Grid.tscn" id="2_lwsbv"]
 [ext_resource type="PackedScene" uid="uid://6cxdwp2jka8k" path="res://GUI/Scenes/InputDialog.tscn" id="6_te73e"]
 
@@ -12,6 +13,7 @@ script = ExtResource("1_wh52b")
 _topUIControl = NodePath("UI/TopUi")
 _startPosition = Vector2i(5, 5)
 _nameInput = NodePath("UI/NameDialog")
+_collectEffectScene = ExtResource("2_i6e2p")
 
 [node name="Camera2D" type="Camera2D" parent="."]
 
@@ -52,6 +54,7 @@ layout_mode = 1
 layout_mode = 1
 
 [node name="NameDialog" parent="UI" instance=ExtResource("6_te73e")]
+visible = false
 layout_mode = 1
 _defaultHeadline = "Anna nimesi"
 

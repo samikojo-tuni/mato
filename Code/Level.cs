@@ -22,6 +22,7 @@ namespace SnakeGame
 		[Export] private TopUIControl _topUIControl = null;
 		[Export] private Vector2I _startPosition = new Vector2I();
 		[Export] private InputDialog _nameInput = null;
+		[Export] private PackedScene _collectEffectScene = null;
 
 		// Sceneviittaukset, joista voidaan luoda olioita.
 		private PackedScene _snakeScene = null;
@@ -37,6 +38,9 @@ namespace SnakeGame
 		// Omenoita voi olla olemassa yksi kerrallaan.
 		private Apple _apple = null;
 		private NuclearWaste _nuclearWaste = null;
+		// Optimointisyystä vain yksi instanssi efektistä, jota kierrätetään aina, kun
+		// efektiä tarvitaan.
+		private GpuParticles2D _collectEffect = null;
 
 		public int Score
 		{
@@ -137,6 +141,27 @@ namespace SnakeGame
 		}
 
 		#region Public methods
+
+		public bool ShowCollectEffect(Vector2 position)
+		{
+			if (_collectEffect == null && _collectEffectScene != null)
+			{
+				_collectEffect = _collectEffectScene.Instantiate<GpuParticles2D>();
+				AddChild(_collectEffect);
+			}
+			else if (_collectEffect == null && _collectEffectScene == null)
+			{
+				GD.PrintErr("Collect effect scene not loaded!");
+				return false;
+			}
+
+			// Aseta efektin sijainti ja käynnistä se. Varmista, että efekti toistetaan vain kerran.
+			_collectEffect.Position = position;
+			_collectEffect.Restart();
+			_collectEffect.OneShot = true;
+
+			return true;
+		}
 
 		/// <summary>
 		/// Aloittaa uuden pelin.

@@ -245,13 +245,7 @@ namespace SnakeGame
 			if (Level.Current.Grid.GetWorldPosition(nextPosition, out Vector2 worldPosition))
 			{
 				// Liikkuminen sallittu.
-				// Tarkista, onko solussa jotain kerättävää.
-				Collectable collectable = Level.Current.Grid.GetCollectable(nextPosition);
-				if (collectable != null)
-				{
-					// Kerättävä esine löytyi. Kerää se.
-					collectable.Collect(this);
-				}
+				Collect(nextPosition);
 
 				MoveSnake(nextPosition);
 			}
@@ -259,6 +253,21 @@ namespace SnakeGame
 			{
 				// Liikkuminen ei onnistunut. Mato osui seinään.
 				Die();
+			}
+		}
+
+		private void Collect(Vector2I nextPosition)
+		{
+			// Tarkista, onko solussa jotain kerättävää.
+			Collectable collectable = Level.Current.Grid.GetCollectable(nextPosition);
+			if (collectable != null)
+			{
+				// Kerättävä esine löytyi. Kerää se.
+				collectable.Collect(this);
+				if (Level.Current.Grid.GetWorldPosition(nextPosition, out Vector2 worldPosition))
+				{
+					Level.Current.ShowCollectEffect(worldPosition);
+				}
 			}
 		}
 
