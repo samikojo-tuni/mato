@@ -17,11 +17,24 @@ namespace SnakeGame
 		public CellOccupierType Type { get { return CellOccupierType.Snake; } }
 
 		[Export] public SnakePartType PartType { get; set; } = SnakePartType.None;
+		[Export] private AnimationTree _animationTree = null;
+		[Export] private double _minAnimTime = 0;
+		[Export] private double _maxAnimTime = 1;
+		private double _animTime = 0;
+
+		// FSM = Finite State Machine, see https://gameprogrammingpatterns.com/state.html
+		private AnimationNodeStateMachinePlayback _animationFSM = null;
+
 		public Vector2I GridPosition { get; private set; }
 
 		public Grid LevelGrid
 		{
 			get { return Level.Current.Grid; }
+		}
+
+		public bool UseAnimation
+		{
+			get { return _animationTree != null; }
 		}
 
 		// Madon rotaatio asteina.
@@ -32,6 +45,34 @@ namespace SnakeGame
 			{ Snake.Direction.Left, 270},
 			{ Snake.Direction.Right, 90},
 		};
+
+		public override void _Ready()
+		{
+			if (UseAnimation)
+			{
+				_animationFSM = (AnimationNodeStateMachinePlayback)_animationTree.Get("parameters/playback");
+				if (_animationFSM != null)
+				{
+					_animationFSM.Start("Idle");
+					_animTime = GD.RandRange(_minAnimTime, _maxAnimTime);
+				}
+			}
+		}
+
+		public override void _Process(double delta)
+		{
+			if (!UseAnimation)
+			{
+				return;
+			}
+
+			_animTime -= delta;
+			if (_animTime <= 0)
+			{
+				_animationFSM.Travel("Lick");
+				_animTime = GD.RandRange(_minAnimTime, _maxAnimTime);
+			}
+		}
 
 		/// <summary>
 		/// Asettaa madon osan gridPositionia vastaavaan sijaintiin levelissä. Varaa gridiltä sijaintia vastaavan solun.
