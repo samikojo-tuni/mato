@@ -1,4 +1,4 @@
-[gd_scene load_steps=10 format=4 uid="uid://cra40mujgqvmt"]
+[gd_scene load_steps=12 format=4 uid="uid://cra40mujgqvmt"]
 
 [ext_resource type="TileSet" uid="uid://jr8hmhq2xmtw" path="res://Art/MapTimes.tres" id="1_tg07n"]
 [ext_resource type="Script" path="res://Code/Level.cs" id="1_wh52b"]
@@ -6,9 +6,11 @@
 [ext_resource type="PackedScene" uid="uid://cyxrb7jg6ft2j" path="res://GUI/Scenes/BottomUI.tscn" id="2_hukud"]
 [ext_resource type="PackedScene" uid="uid://bcwb660lpxvo4" path="res://Levels/Effects/CollectEffect.tscn" id="2_i6e2p"]
 [ext_resource type="PackedScene" uid="uid://cfjsuvcfb1s5w" path="res://Levels/Grid/Grid.tscn" id="2_lwsbv"]
-[ext_resource type="PackedScene" uid="uid://6cxdwp2jka8k" path="res://GUI/Scenes/InputDialog.tscn" id="6_te73e"]
+[ext_resource type="PackedScene" path="res://GUI/Scenes/InputDialog.tscn" id="6_te73e"]
+[ext_resource type="PackedScene" uid="uid://ckuttgsk1js2w" path="res://GUI/Scenes/SettingsWindow.tscn" id="8_f4vaw"]
 [ext_resource type="AudioStream" uid="uid://dgajjrc6lho38" path="res://Audio/collect.wav" id="8_uf5aw"]
 [ext_resource type="AudioStream" uid="uid://drsywwuaj1gsu" path="res://Audio/death.ogg" id="9_vow1s"]
+[ext_resource type="Script" path="res://Code/Settings.cs" id="11_8qtiv"]
 
 [node name="Level" type="Node2D" node_paths=PackedStringArray("_topUIControl", "_nameInput", "_deathSound", "_collectSound")]
 script = ExtResource("1_wh52b")
@@ -66,6 +68,10 @@ _defaultHeadline = "Anna nimesi"
 offset_top = 128.0
 offset_bottom = 328.0
 
+[node name="SettingsWindow" parent="UI" instance=ExtResource("8_f4vaw")]
+process_mode = 3
+layout_mode = 1
+
 [node name="Audio" type="Node" parent="."]
 
 [node name="CollectAudio" type="AudioStreamPlayer2D" parent="Audio"]
@@ -78,5 +84,8 @@ bus = &"SFX"
 
 [node name="AudioListener2D" type="AudioListener2D" parent="."]
 current = true
+
+[node name="Settings" type="Node" parent="."]
+script = ExtResource("11_8qtiv")
 
 [editable path="UI/NameDialog"]

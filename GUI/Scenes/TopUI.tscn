@@ -31,7 +31,7 @@ alignment = 1
 layout_mode = 2
 theme = ExtResource("1_lm5y3")
 theme_override_font_sizes/font_size = 32
-text = "Mato"
+text = "GAME_NAME"
 horizontal_alignment = 1
 vertical_alignment = 1
 
@@ -47,4 +47,4 @@ text = "Pisteet: 1000000"
 [node name="RestartButton" type="Button" parent="VBoxContainer/HBoxContainer"]
 layout_mode = 2
 theme = ExtResource("1_lm5y3")
-text = "Restart"
+text = "RESTART"

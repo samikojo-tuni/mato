@@ -1,0 +1,89 @@
+[gd_scene load_steps=6 format=3 uid="uid://ckuttgsk1js2w"]
+
+[ext_resource type="PackedScene" path="res://GUI/Scenes/DialogWindow.tscn" id="1_5cn06"]
+[ext_resource type="PackedScene" uid="uid://c5fmvjajevnld" path="res://GUI/Scenes/AudioControl.tscn" id="2_1cp1t"]
+[ext_resource type="Script" path="res://Code/UI/SettingsWindow.cs" id="2_r5ibw"]
+[ext_resource type="Texture2D" uid="uid://g3g0lfjdjok" path="res://Art/UI/fi.png" id="3_oj40q"]
+[ext_resource type="Texture2D" uid="uid://c3ii565jvmhtl" path="res://Art/UI/gb.png" id="4_gqaqf"]
+
+[node name="Control" node_paths=PackedStringArray("_fiButton", "_enButton", "_masterAudioControl", "_musicAudioControl", "_effectsAudioControl") instance=ExtResource("1_5cn06")]
+script = ExtResource("2_r5ibw")
+_fiButton = NodePath("Panel/Settings/VBoxContainer/HBoxContainer/FI")
+_enButton = NodePath("Panel/Settings/VBoxContainer/HBoxContainer/EN")
+_masterAudioControl = NodePath("Panel/Settings/VBoxContainer/MasterAudio")
+_musicAudioControl = NodePath("Panel/Settings/VBoxContainer/Music")
+_effectsAudioControl = NodePath("Panel/Settings/VBoxContainer/SFX")
+_defaultHeadline = "SETTINGS"
+_defaultText = ""
+_openOnStart = true
+
+[node name="Panel" parent="." index="0"]
+offset_bottom = 455.0
+
+[node name="Settings" type="Control" parent="Panel" index="1"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 4.0
+offset_top = 29.0
+offset_right = -4.0
+offset_bottom = -43.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Panel/Settings" index="0"]
+layout_mode = 1
+anchors_preset = 10
+anchor_right = 1.0
+offset_bottom = 18.0
+grow_horizontal = 2
+
+[node name="AudioLabel" type="Label" parent="Panel/Settings/VBoxContainer" index="0"]
+layout_mode = 2
+text = "AUDIO"
+horizontal_alignment = 1
+
+[node name="MasterAudio" parent="Panel/Settings/VBoxContainer" index="1" instance=ExtResource("2_1cp1t")]
+layout_mode = 2
+
+[node name="Label" parent="Panel/Settings/VBoxContainer/MasterAudio" index="0"]
+text = "MASTER_VOLUME"
+
+[node name="Music" parent="Panel/Settings/VBoxContainer" index="2" instance=ExtResource("2_1cp1t")]
+layout_mode = 2
+_busName = "Music"
+
+[node name="Label" parent="Panel/Settings/VBoxContainer/Music" index="0"]
+text = "MUSIC_VOLUME"
+
+[node name="SFX" parent="Panel/Settings/VBoxContainer" index="3" instance=ExtResource("2_1cp1t")]
+layout_mode = 2
+_busName = "SFX"
+
+[node name="Label" parent="Panel/Settings/VBoxContainer/SFX" index="0"]
+text = "SFX_VOLUME"
+
+[node name="LocalizationLabel" type="Label" parent="Panel/Settings/VBoxContainer" index="4"]
+layout_mode = 2
+text = "LOCALIZATION"
+horizontal_alignment = 1
+
+[node name="HBoxContainer" type="HBoxContainer" parent="Panel/Settings/VBoxContainer" index="5"]
+layout_mode = 2
+alignment = 1
+
+[node name="FI" type="TextureButton" parent="Panel/Settings/VBoxContainer/HBoxContainer" index="0"]
+layout_mode = 2
+texture_normal = ExtResource("3_oj40q")
+
+[node name="EN" type="TextureButton" parent="Panel/Settings/VBoxContainer/HBoxContainer" index="1"]
+layout_mode = 2
+texture_normal = ExtResource("4_gqaqf")
+
+[node name="Label" parent="Panel" index="2"]
+visible = false
+
+[editable path="Panel/Settings/VBoxContainer/MasterAudio"]
+[editable path="Panel/Settings/VBoxContainer/Music"]
+[editable path="Panel/Settings/VBoxContainer/SFX"]

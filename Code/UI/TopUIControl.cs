@@ -21,6 +21,19 @@ namespace SnakeGame.UI
 			}
 		}
 
+		public void Initialize()
+		{
+			// Kuuntele kielen vaihtumista.
+			Level.Current.Settings.Connect(Settings.SignalName.LanguageChanged,
+				new Callable(this, nameof(OnLanguageChanged)));
+		}
+
+		private void OnLanguageChanged(string langCode)
+		{
+			// Score-tekstin päivitys, kun kieli vaihtuu.
+			SetScore(Level.Current.Score);
+		}
+
 		private void OnRestartPressed()
 		{
 			Level.Current.ResetGame();
@@ -28,7 +41,7 @@ namespace SnakeGame.UI
 
 		public void SetScore(int score)
 		{
-			_scoreLabel.Text = $"Pisteet: {score}";
+			_scoreLabel.Text = Tr("SCORE") + ": " + score.ToString();
 		}
 	}
 }

@@ -38,6 +38,8 @@ namespace SnakeGame
 		private PackedScene _appleScene = null;
 		private PackedScene _nuclearWasteScene = null;
 
+		private SceneTree _levelScene = null;
+
 		private int _score = 0;
 
 		private Grid _grid = null;
@@ -82,6 +84,18 @@ namespace SnakeGame
 			get { return _snake; }
 		}
 
+		public Settings Settings
+		{
+			get;
+			private set;
+		}
+
+		public SettingsWindow SettingsWindow
+		{
+			get;
+			private set;
+		}
+
 		// Rakentaja. Käytetään alustamaan olio.
 		public Level()
 		{
@@ -102,6 +116,25 @@ namespace SnakeGame
 			{
 				_nameInput.Close();
 				_nameInput.Connect(InputDialog.SignalName.DialogClosed, new Callable(this, nameof(OnDialogClosed)));
+			}
+
+			Settings = GetNode<Settings>("Settings");
+			if (Settings == null)
+			{
+				GD.PrintErr("Settingsiä ei löytynyt Levelin lapsinodeista!");
+			}
+
+			SettingsWindow = GetNode<SettingsWindow>("UI/SettingsWindow");
+			if (SettingsWindow != null)
+			{
+				SettingsWindow.Initialize();
+				SettingsWindow.Close();
+			}
+
+			TopUIControl topUIControl = GetNode<TopUIControl>("UI/TopUi");
+			if (topUIControl != null)
+			{
+				topUIControl.Initialize();
 			}
 
 			ResetGame();
@@ -470,6 +503,26 @@ namespace SnakeGame
 			}
 
 			return true;
+		}
+
+		public void Pause()
+		{
+			if (_levelScene == null)
+			{
+				_levelScene = GetTree();
+			}
+
+			_levelScene.Paused = true;
+		}
+
+		public void Resume()
+		{
+			if (_levelScene == null)
+			{
+				_levelScene = GetTree();
+			}
+
+			_levelScene.Paused = false;
 		}
 	}
 }
