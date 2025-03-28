@@ -52,4 +52,4 @@ amount = 20
 process_material = SubResource("ParticleProcessMaterial_jfn5y")
 texture = ExtResource("1_cxswv")
 one_shot = true
-trail_lifetime = 0.01
+trail_lifetime = 1.0
